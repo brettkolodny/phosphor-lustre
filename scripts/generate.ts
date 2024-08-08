@@ -18,12 +18,19 @@ async function main() {
     Deno.exit(1);
   }
 
-  const lustreFunctions = [];
-  for (const name of Object.keys(icons)) {
-    const iconGroup = icons[name];
+  const iconSets: [string, string, string][] = [];
 
-    lustreFunctions.push(await generateLustreIcon(name, iconGroup));
+  for (const name of Object.keys(icons)) {
+    for (const weight of Object.keys(icons[name])) {
+      iconSets.push([name, weight, icons[name][weight]]);
+    }
   }
+
+  const lustreFunctions = await Promise.all(
+    iconSets.map(([name, weight, svgString]) =>
+      generateLustreIcon(name, weight, svgString)
+    ),
+  );
 
   const template = Deno.readTextFileSync(TEMPLATE_PATH);
   const file = template + lustreFunctions.join("\n");
@@ -112,35 +119,26 @@ function checkFiles(icon: Record<string, string>) {
 
 async function generateLustreIcon(
   name: string,
-  icons: Record<string, string>,
+  weight: string,
+  svgString: string,
 ): Promise<string> {
-  const thin = (await parse(icons["thin"])).children.map(generateLustreSvg)
-    .join(", ");
-  const light = (await parse(icons["light"])).children.map(generateLustreSvg)
-    .join(", ");
-  const regular = (await parse(icons["regular"])).children.map(
-    generateLustreSvg,
-  )
-    .join(", ");
-  const bold = (await parse(icons["bold"])).children.map(generateLustreSvg)
-    .join(", ");
-  const fill = (await parse(icons["fill"])).children.map(generateLustreSvg)
-    .join(", ");
-  const dutone = (await parse(icons["duotone"])).children.map(generateLustreSvg)
+  const children = (await parse(svgString)).children.map(generateLustreSvg)
     .join(", ");
 
   return `      
-pub fn ${name}(weight: IconWeight) -> IconVariant(msg) {
-  let elements = case weight {
-    Thin -> [${thin}]
-    Light -> [${light}]
-    Regular -> [${regular}]
-    Bold -> [${bold}]
-    Fill -> [${fill}]
-    Dutone -> [${dutone}]
-  }
+pub fn ${name}_${weight} (attrs: List(Attribute(msg))) -> Element(msg) {
+  let base_attributes = [
+    attr.attribute("xmlns", "http://www.w3.org/2000/svg"),
+    attr.attribute("fill", "currentColor"),
+    attr.attribute("stroke", "currentColor"),
+    attr.attribute("stroke-linecap", "round"),
+    attr.attribute("viewBox", "0 0 256 256"),
+    ..attrs
+  ]
 
-  IconVariant(attrs: default_attributes(), src: elements)
+  let combined_attributes = list.concat([base_attributes, attrs])
+
+  svg.svg(combined_attributes, [${children}])
 }
     `;
 }
