@@ -1,0 +1,5 @@
+{
+  "tasks": {
+    "generate": "deno run --allow-read=./ --allow-write=./phosphor_lustre/ ./scripts/generate.ts"
+  }
+}
