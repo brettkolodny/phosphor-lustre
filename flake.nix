@@ -1,7 +1,9 @@
 {
-  description = "A Nix-flake-based Elm development environment";
+  description = "A Nix-flake-based Gleam development environment";
 
-  inputs.nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1.*.tar.gz";
+  # inputs.nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1.*.tar.gz";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/master";
+
 
   outputs = { self, nixpkgs }:
     let
@@ -13,14 +15,19 @@
     {
       devShells = forEachSupportedSystem ({ pkgs }: {
         default = pkgs.mkShell {
-          packages = 
-            (with pkgs; 
-              [  
-                deno
-                erlang
-                rebar3
-              ]
-            );
+          packages = with pkgs; 
+            [ 
+              gleam 
+              erlang_27
+              nodejs
+              nil
+              rebar3
+              deno
+            ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks;
+            [
+              Cocoa
+              CoreServices
+            ]);
         };
       });
     };

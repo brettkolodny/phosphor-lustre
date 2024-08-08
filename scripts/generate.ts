@@ -133,6 +133,8 @@ pub fn ${name}_${weight} (attrs: List(Attribute(msg))) -> Element(msg) {
     attr.attribute("stroke", "currentColor"),
     attr.attribute("stroke-linecap", "round"),
     attr.attribute("viewBox", "0 0 256 256"),
+    attr.attribute("width", "1em"),
+    attr.attribute("height", "1em"),
     ..attrs
   ]
 
