@@ -3,7 +3,7 @@ version = "1.0.0"
 
 description = "A package of lustre compatible phosphor icons"
 licences = ["Apache-2.0"]
-repository = { type = "github", user = "brettkolodny", repo = "https://github.com/brettkolodny/phosphor-lustre" }
+repository = { type = "github", user = "brettkolodny", repo = "phosphor-lustre" }
 
 [dependencies]
 gleam_stdlib = ">= 0.34.0 and < 2.0.0"
