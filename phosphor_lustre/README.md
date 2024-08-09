@@ -12,7 +12,7 @@ import lustre/element/html
 import phosphor
 
 pub fn like_button() {
-  html.button([], [phosphor.heart_bold()])
+  html.button([], [phosphor.heart_bold([])])
 }
 ```
 
