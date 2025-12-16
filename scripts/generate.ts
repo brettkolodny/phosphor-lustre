@@ -137,6 +137,7 @@ pub fn ${name}_${weight} (attrs: List(Attribute(msg))) -> Element(msg) {
     attr.attribute("height", "1em"),
     ..attrs
   ]
+  |> list.reverse()
 
   svg.svg(base_attributes, [${children}])
 }
