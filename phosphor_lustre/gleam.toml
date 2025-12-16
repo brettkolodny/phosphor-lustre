@@ -7,7 +7,7 @@ repository = { type = "github", user = "brettkolodny", repo = "phosphor-lustre" 
 
 [dependencies]
 gleam_stdlib = ">= 0.34.0 and < 2.0.0"
-lustre = ">= 4.3.2 and < 5.0.0"
+lustre = ">= 5.4.0 and < 6.0.0"
 
 [dev-dependencies]
 gleeunit = ">= 1.0.0 and < 2.0.0"

@@ -138,9 +138,7 @@ pub fn ${name}_${weight} (attrs: List(Attribute(msg))) -> Element(msg) {
     ..attrs
   ]
 
-  let combined_attributes = list.concat([base_attributes, attrs])
-
-  svg.svg(combined_attributes, [${children}])
+  svg.svg(base_attributes, [${children}])
 }
     `;
 }
